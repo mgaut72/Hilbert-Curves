@@ -1,9 +1,6 @@
 #include <stdio.h>
 #include <stdio.h>
-
-void step(int dir, int blen, int *s, int *x, int *y);
-void binary(unsigned k, int len, char *s);
-void hilbert(int dir, int rot, int order, int blen, int *s, int *x, int *y);
+#include "hilbert_generation.h"
 
 void hilbert(int dir, int rot, int order, int blen, int *s, int *x, int *y){
 /* rot == rotation is either +/- 1 corresponding to clockwise or counter
@@ -46,7 +43,6 @@ void hilbert(int dir, int rot, int order, int blen, int *s, int *x, int *y){
 
 
 void step(int dir, int blen, int *s, int *x, int *y){
-    char ii[33], xx[17], yy[17];
 
     switch (dir & 3) {      // effectively modding by 4, but always positive
     // alter the coordinates assocaiated with this step
@@ -59,11 +55,15 @@ void step(int dir, int blen, int *s, int *x, int *y){
         case 3:
             (*y)--; break;
     }
-    binary(*s, 2*blen, ii);
-    binary(*x, blen, xx);
-    binary(*y, blen, yy);
 
-    printf("%4d : %d %s %s %s\n", *s, dir & 3, ii, xx, yy);
+    if (verbose_generation){
+        char ii[33], xx[17], yy[17];
+        binary(*s, 2*blen, ii);
+        binary(*x, blen, xx);
+        binary(*y, blen, yy);
+        printf("%4d : %d %s %s %s\n", *s, dir & 3, ii, xx, yy);
+    }
+
     (*s)++;
 }
 
@@ -82,22 +82,4 @@ void binary(unsigned k, int len, char *s){
             s[i] = '0';
         k = k>>1;
     }
-}
-
-int main(int argc, char **argv){
-    int order;
-    if (argc != 2){
-        printf("expected the order as a command line argument\n");
-        return 1;
-    }
-
-    int x = -1, y = 0;          // coordinates
-    int s = 0;                  // distance along curve
-    int blen;                   // # significant digits of s
-
-    order = atoi(argv[1]);
-    blen = order;
-    step(0, blen, &s, &x, &y);
-    hilbert(0,1,order, blen, &s, &x, &y);
-    return 0;
 }
