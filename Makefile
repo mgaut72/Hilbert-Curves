@@ -2,11 +2,11 @@ EXEC   = main.exe      #name of executable
 
 OPTIMIZE =  -O2		         #compilation optimization
 
-OBJS   = main.o hilbert_generation.o        #object files to create
+OBJS   = main.o hilbert_generation.o hil_xy_from_s.o        #object files to create
 
 CC     = gcc              #CC is the environment variable for the C compiler
 
-INCL   = hilbert_generation.h              #local header files to include
+INCL   = hilbert_generation.h hil_xy_from_s.h           #local header files to include
 
 LIBS   =                                 #libraries to add
 
