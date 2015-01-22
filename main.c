@@ -37,7 +37,7 @@ int main(int argc, char **argv){
     hil_xy_from_s(distance, order, &actual_x, &actual_y);
 
     printf("expected : (%d, %d)\nactual   : (%d, %d)\n",
-            expected_x, expected_x, actual_x, actual_y);
+            expected_x, expected_y, actual_x, actual_y);
 
     return 0;
 }
