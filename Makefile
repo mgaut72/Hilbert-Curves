@@ -8,7 +8,7 @@ CC     = gcc              #CC is the environment variable for the C compiler
 
 INCL   = hilbert_generation.h hil_xy_from_s.h           #local header files to include
 
-LIBS   =                                 #libraries to add
+LIBS   = -lm                             #libraries to add
 
 
 #the following lines build an executable from the object files

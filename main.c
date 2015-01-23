@@ -1,43 +1,75 @@
 #include <stdio.h>
+#include <math.h>
 #include "hilbert_generation.h"
 #include "hil_xy_from_s.h"
 
 int verbose_generation; // hilbert_generation.h expects this for debug output
+int verbose_testing;
 
 int main(int argc, char **argv){
+
+    if(argc != 2){
+        printf("expected curve order as command line argument\n");
+        return;
+    }
 
     /*
      * hilbert curve generation
      */
 
-    int x = -1, y = 0;          // coordinates
-    int s = 0;                  // distance along curve
-    int blen;                   // # significant digits of s
-    int order;                  // order of hilbert curve
-    verbose_generation = 1;
-
-    order = 3;
-    blen = order;
-    step(0, blen, &s, &x, &y);
-    hilbert(0,1,order, blen, &s, &x, &y);
+    int order = atoi(argv[1]);                  // order of hilbert curve
     verbose_generation = 0;
+    order = 3;
+    hilbertStep *curve = genHilbert(order);
 
     /*
      * coordinates form distance
      *
      * expected values based on output from hilbert generation
      */
-    printf("\n\n");
-    unsigned distance = 30;
-    unsigned expected_x = 2,
-             expected_y = 4;
+    unsigned distance, x, y;
 
-    unsigned actual_x, actual_y;
-
-    hil_xy_from_s(distance, order, &actual_x, &actual_y);
-
-    printf("expected : (%d, %d)\nactual   : (%d, %d)\n",
-            expected_x, expected_x, actual_x, actual_y);
+    int i;
+    for(i = 0; i < pow(4, order); i++){
+        hil_xy_from_s(i, order, &x, &y);
+        if (verify(curve, i, x, y)){
+            break;
+        }
+    }
 
     return 0;
 }
+
+int verify(hilbertStep *curve, int distance, int x, int y){
+    hilbertStep *tmp = curve;
+    tmp += distance;
+
+    if(verbose_testing){
+        printf("actual s = %d, x = %d, y = %d\n", tmp->s, tmp->x, tmp->y);
+        printf("calculated s = %d, x = %d, y = %d\n", distance, x, y);
+    }
+
+    int retval = 0;
+
+    if(distance != tmp->s){
+        printf("ERROR, distance mismatch\n");
+        retval = 1;
+    }
+
+    if(x != tmp->x){
+        printf("ERROR, x mismatch\n");
+        retval = 1;
+    }
+
+    if(y != tmp->y){
+        printf("ERROR, y mismatch\n");
+        retval = 1;
+    }
+
+    return retval;
+}
+
+
+
+
+
