@@ -1,8 +1,34 @@
 #include <stdio.h>
-#include <stdio.h>
+#include <stdlib.h>
+#include <math.h>
 #include "hilbert_generation.h"
 
-void hilbert(int dir, int rot, int order, int blen, int *s, int *x, int *y){
+hilbertStep* genHilbert(int order){
+    hilbertStep *curve = malloc((1 + pow(4,order)) * sizeof(*curve));
+    hilbertStep *curr = curve;
+
+
+    /* initial conditions */
+    int blen = order;
+    int dir = 0;
+    int rot = 1;
+    curr->x = -1;
+    curr->y = 0;
+    curr->s = -1;
+
+    curve++; // skip over initialization in our reported results
+
+    step(dir, blen, &curr);
+
+    hilbert(dir,rot,order, blen, &curr);
+
+    return curve;
+}
+
+
+
+
+void hilbert(int dir, int rot, int order, int blen, hilbertStep **curr){
 /* rot == rotation is either +/- 1 corresponding to clockwise or counter
  * dir = direction = 0,1,2,3 corresponding to right, up, left, down
  * order is the resolution of the curve we are currently at
@@ -28,45 +54,52 @@ void hilbert(int dir, int rot, int order, int blen, int *s, int *x, int *y){
      */
 
     dir = dir + rot;                                // set dir to up
-    hilbert(dir, -rot, order - 1, blen, s, x, y);   // draw sub-curve up, ccw
-    step(dir, blen, s, x, y);                       // step up
+    hilbert(dir, -rot, order - 1, blen, curr);   // draw sub-curve up, ccw
+    step(dir, blen, curr);                       // step up
 
     dir = dir - rot;                                // set dir to right
-    hilbert(dir, rot, order - 1, blen, s, x, y);    // sub-curve right, cw
-    step(dir, blen, s, x, y);                       // step right
-    hilbert(dir, rot, order - 1, blen, s, x, y);    // sub-curve right, cw
+    hilbert(dir, rot, order - 1, blen, curr);    // sub-curve right, cw
+    step(dir, blen, curr);                       // step right
+    hilbert(dir, rot, order - 1, blen, curr);    // sub-curve right, cw
 
     dir = dir - rot;                                // set dir to down
-    step(dir, blen, s, x, y);                       // step down
-    hilbert(dir, -rot, order - 1, blen, s, x, y);   // sub-curve down, ccw
+    step(dir, blen, curr);                       // step down
+    hilbert(dir, -rot, order - 1, blen, curr);   // sub-curve down, ccw
 }
 
 
-void step(int dir, int blen, int *s, int *x, int *y){
+void step(int dir, int blen, hilbertStep **curr){
+
+    *((*curr)+1) = **curr; // start the next the same as the current
 
     switch (dir & 3) {      // effectively modding by 4, but always positive
     // alter the coordinates assocaiated with this step
         case 0:
-            (*x)++; break;
+            ((*curr)+1)->x = (*curr)->x + 1; break;
         case 1:
-            (*y)++; break;
+            ((*curr)+1)->y = (*curr)->y + 1; break;
         case 2:
-            (*x)--; break;
+            ((*curr)+1)->x = (*curr)->x - 1; break;
         case 3:
-            (*y)--; break;
+            ((*curr)+1)->y = (*curr)->y - 1; break;
     }
+
+    ((*curr)+1)->s = (*curr)->s + 1; // increment distance along curve
 
     if (verbose_generation){
-        char ii[33], xx[17], yy[17];
-        binary(*s, 2*blen, ii);
-        binary(*x, blen, xx);
-        binary(*y, blen, yy);
-        printf("%4d : %d %s %s %s\n", *s, dir & 3, ii, xx, yy);
+        printStep(*(*curr + 1), blen);
     }
 
-    (*s)++;
+    (*curr)++; // move our pointer to the next element in the curve
 }
 
+void printStep(hilbertStep step, int blen){
+    char ii[33], xx[17], yy[17];
+    binary(step.s, 2*blen, ii);
+    binary(step.x, blen, xx);
+    binary(step.y, blen, yy);
+    printf("%4d : %s %s %s\n", step.s, ii, xx, yy);
+}
 
 void binary(unsigned k, int len, char *s){
 /* num -> string

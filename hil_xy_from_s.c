@@ -18,12 +18,12 @@ void hil_xy_from_s(unsigned s, int n, unsigned *xp, unsigned *yp){
     /* loop consider n pairs of bits of s
      */
 
-        row = 4 * state       // since there are 4 rows per state
-            | ((s >> i) & 3); // get to the 2 bits of s we are considering
+        row = 4 * state     // since there are 4 rows per state
+            | (s >> i) & 3; // get to the 2 bits of s we are considering
 
 
-        x = (x << 1) | ((0x936C >> row) & 1); // TODO, figure out these
-        y = (y << 1) | ((0x39C6 >> row) & 1); //       magic numbers
+        x = (x << 1) | (0x936C >> row) & 1; // TODO, figure out these
+        y = (y << 1) | (0x39C6 >> row) & 1; //       magic numbers
         state = (0x3E6B94C1 >> 2*row) & 3;
     }
 
