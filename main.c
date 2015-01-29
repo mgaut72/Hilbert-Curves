@@ -18,8 +18,9 @@ int main(int argc, char **argv){
      */
 
     int order = atoi(argv[1]);                  // order of hilbert curve
+    printf("generating a curve of order %d\n", order);
+
     verbose_generation = 0;
-    order = 3;
     hilbertStep *curve = genHilbert(order);
 
     /*
@@ -29,6 +30,7 @@ int main(int argc, char **argv){
      */
     unsigned distance, x, y;
 
+    printf("testing the coordinate calculation for each point\n");
     int i;
     for(i = 0; i < pow(4, order); i++){
         hil_xy_from_s(i, order, &x, &y);
