@@ -2,6 +2,7 @@
 #include <math.h>
 #include "hilbert_generation.h"
 #include "hil_xy_from_s.h"
+#include "timer.h"
 
 int verbose_generation; // hilbert_generation.h expects this for debug output
 int verbose_testing;
@@ -13,6 +14,8 @@ int main(int argc, char **argv){
         return;
     }
 
+    double t_start, t_stop; // timer variables
+
     /*
      * hilbert curve generation
      */
@@ -21,7 +24,10 @@ int main(int argc, char **argv){
     printf("generating a curve of order %d\n", order);
 
     verbose_generation = 0;
+    t_start = timer();
     hilbertStep *curve = genHilbert(order);
+    t_stop  = timer();
+    printf("curve generation time %e\n", t_stop - t_start);
 
     /*
      * coordinates form distance
@@ -30,6 +36,7 @@ int main(int argc, char **argv){
      */
     unsigned distance, x, y;
 
+    t_start = timer();
     printf("testing the coordinate calculation for each point\n");
     int i;
     for(i = 0; i < pow(4, order); i++){
@@ -38,6 +45,8 @@ int main(int argc, char **argv){
             break;
         }
     }
+    t_stop  = timer();
+    printf("curve verification time %e\n", t_stop - t_start);
 
     return 0;
 }
