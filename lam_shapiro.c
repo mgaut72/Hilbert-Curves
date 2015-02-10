@@ -49,10 +49,10 @@ void hil_xy_from_s_ls(unsigned s, int n, unsigned *xp, unsigned *yp){
     unsigned x, y,  // coordinates we will build up to assign to *xp, *yp
              temp;  // temporary value to perform swaps
 
-    for (i = 0; i< 2*n; i++){
+    for (i = 0; i< 2*n; i+= 2){
 
         sa = (s >> (i + 1)) & 1;    // isolate the next two bits of s
-        sa = (s >> i) & 1;
+        sb = (s >> i) & 1;
 
         if ((sa ^ sb) == 0){        // when sa and sb are the same, swap x, y
             temp = x;
@@ -73,7 +73,7 @@ void hil_xy_from_s_ls(unsigned s, int n, unsigned *xp, unsigned *yp){
         x = (x >> 1)        // make room for new bit
           | (sa << 31);     // prepend sa in the new spot
         y = (y >> 1)
-          | ((sa ^ xb) << 31);
+          | ((sa ^ sb) << 31);
     }
 
     /* set our return values, zero-pad for different lengths */
