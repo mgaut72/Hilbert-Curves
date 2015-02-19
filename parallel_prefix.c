@@ -1,4 +1,4 @@
-#include "parallel_prefix.h""
+#include "parallel_prefix.h"
 /* familiarity with the derivation of the lam-shapiro method is recommended
  * before attempting to understanding the derivation of the parallel prefix
  * method, as parallel prefix relies on the same perspective of the structure

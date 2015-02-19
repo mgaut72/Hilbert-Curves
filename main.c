@@ -3,6 +3,7 @@
 #include "hilbert_generation.h"
 #include "hil_xy_from_s.h"
 #include "lam_shapiro.h"
+#include "parallel_prefix.h"
 #include "timer.h"
 
 int verbose_generation; // hilbert_generation.h expects this for debug output
@@ -40,7 +41,6 @@ int main(int argc, char **argv){
 
     distance = x = y = 0;
     t_start = timer();
-    printf("testing the coordinate calculation for each point\n");
     for(i = 0; i < pow(4, order); i++){
         hil_xy_from_s(i, order, &x, &y);
         if (verify(curve, i, x, y)){
@@ -55,7 +55,6 @@ int main(int argc, char **argv){
      */
     distance = x = y = 0;
     t_start = timer();
-    printf("testing the coordinate calculation for each point\n");
     for(i = 0; i < pow(4, order); i++){
         hil_xy_from_s_ls(i, order, &x, &y);
         if (verify(curve, i, x, y)){
@@ -65,6 +64,19 @@ int main(int argc, char **argv){
     t_stop  = timer();
     printf("Lam-Shapiro curve verification time %e\n", t_stop - t_start);
 
+    /*
+     * coordinates from distance using the parallel prefix method
+     */
+    distance = x = y = 0;
+    t_start = timer();
+    for(i = 0; i < pow(4, order); i++){
+        hil_xy_from_s_pp(i, order, &x, &y);
+        if (verify(curve, i, x, y)){
+            break;
+        }
+    }
+    t_stop  = timer();
+    printf("parallel prefix curve verification time %e\n", t_stop - t_start);
 
     return 0;
 }
