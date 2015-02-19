@@ -72,7 +72,7 @@ void hil_xy_from_s(unsigned s, int n, unsigned *xp, unsigned *yp){
     /* loop consider n pairs of bits of s */
 
         row = 4 * state     // since there are 4 rows per state
-            | (s >> i) & 3; // get to the 2 bits of s we are considering
+            | ((s >> i) & 3); // get to the 2 bits of s we are considering
 
 
         /* use the table to lookup and append to x,y and then change state */
