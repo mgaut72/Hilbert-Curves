@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <stdlib.h>
 #include <math.h>
 #include "hilbert_generation.h"
 #include "hil_xy_from_s.h"
@@ -8,12 +9,14 @@
 
 int verbose_generation; // hilbert_generation.h expects this for debug output
 int verbose_testing;
+int verify(hilbertStep *curve, int distance, int x, int y);
+
 
 int main(int argc, char **argv){
 
     if(argc != 2){
         printf("expected curve order as command line argument\n");
-        return;
+        return 1;
     }
 
     double t_start, t_stop; // timer variables
