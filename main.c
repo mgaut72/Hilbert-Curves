@@ -10,10 +10,14 @@ int verbose_testing;
 
 int main(int argc, char **argv){
 
-    if(argc != 2){
-        printf("expected curve order as command line argument\n");
+    if(argc < 2){
+        fprintf(stderr, "expected curve order as command line argument\n");
         return;
     }
+
+    int repititions = 1;
+    if(argc > 2)
+        repititions = atoi(argv[2]);
 
     double t_start, t_stop; // timer variables
 
@@ -22,13 +26,13 @@ int main(int argc, char **argv){
      */
 
     int order = atoi(argv[1]);                  // order of hilbert curve
-    printf("generating a curve of order %d\n", order);
+    fprintf(stderr, "generating a curve of order %d\n", order);
 
     verbose_generation = 0;
     t_start = timer();
     hilbertStep *curve = genHilbert(order);
     t_stop  = timer();
-    printf("curve generation time %e\n", t_stop - t_start);
+    fprintf(stderr, "curve generation time %e\n", t_stop - t_start);
 
     /*
      * coordinates from distance using the iterative left to right method
@@ -36,34 +40,39 @@ int main(int argc, char **argv){
      * expected values based on output from hilbert generation
      */
     unsigned distance, x, y;
-    int i;
+    int i,j;
 
-    distance = x = y = 0;
+
     t_start = timer();
-    printf("testing the coordinate calculation for each point\n");
-    for(i = 0; i < pow(4, order); i++){
-        hil_xy_from_s(i, order, &x, &y);
-        if (verify(curve, i, x, y)){
-            break;
+    for(j = 0; j < repititions; j++){
+        distance = x = y = 0;
+        fprintf(stderr, "testing the coordinate calculation for each point\n");
+        for(i = 0; i < pow(4, order); i++){
+            hil_xy_from_s(i, order, &x, &y);
+            if (verify(curve, i, x, y)){
+                break;
+            }
         }
     }
     t_stop  = timer();
-    printf("state table based curve verification time %e\n", t_stop - t_start);
+    printf("state_table %e\n", t_stop - t_start);
 
     /*
      * coordinates from distance using the lam shapiro method
      */
-    distance = x = y = 0;
     t_start = timer();
-    printf("testing the coordinate calculation for each point\n");
-    for(i = 0; i < pow(4, order); i++){
-        hil_xy_from_s_ls(i, order, &x, &y);
-        if (verify(curve, i, x, y)){
-            break;
+    for(j = 0; j < repititions; j++){
+        distance = x = y = 0;
+        fprintf(stderr, "testing the coordinate calculation for each point\n");
+        for(i = 0; i < pow(4, order); i++){
+            hil_xy_from_s_ls(i, order, &x, &y);
+            if (verify(curve, i, x, y)){
+                break;
+            }
         }
     }
     t_stop  = timer();
-    printf("Lam-Shapiro curve verification time %e\n", t_stop - t_start);
+    printf("Lam-Shapiro %e\n", t_stop - t_start);
 
 
     return 0;
@@ -78,27 +87,25 @@ int verify(hilbertStep *curve, int distance, int x, int y){
         printf("calculated s = %d, x = %d, y = %d\n", distance, x, y);
     }
 
-    int retval = 0;
-
     if(distance != tmp->s){
-        printf("ERROR, distance mismatch\n");
-        printf("expected %d, got %d\n", distance, tmp->s);
-        retval = 1;
+        fprintf(stderr, "ERROR, distance mismatch\n");
+        fprintf(stderr, "expected %d, got %d\n", distance, tmp->s);
+        return 1;
     }
 
     if(x != tmp->x){
-        printf("ERROR, x mismatch\n");
-        printf("expected %d, got %d\n", x, tmp->x);
-        retval = 1;
+        fprintf(stderr, "ERROR, x mismatch\n");
+        fprintf(stderr, "expected %d, got %d\n", x, tmp->x);
+        return 1;
     }
 
     if(y != tmp->y){
-        printf("ERROR, y mismatch\n");
-        printf("expected %d, got %d\n", y, tmp->y);
-        retval = 1;
+        fprintf(stderr, "ERROR, y mismatch\n");
+        fprintf(stderr, "expected %d, got %d\n", y, tmp->y);
+        return 1;
     }
 
-    return retval;
+    return 0;
 }
 
 
