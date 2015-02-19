@@ -5,20 +5,25 @@ import numpy as np
 import collections
 
 working_dir = os.getcwd()
+NUM_REPITITIONS = 1000
+
 
 def fin():
-    sp.call("cd " + working_dir, shell=True);
+    sp.call("cd " + working_dir, shell=True)
+
 
 def make():
     cd_top = "cd \"$(git rev-parse --show-toplevel)\""
     make = "make clean && make"
     ret = "cd ./analysis"
     cmd = cd_top + " && " + make + " && " + ret
-    sp.call(cmd, shell=True);
+    sp.call(cmd, shell=True)
+
 
 def run_order(n):
-    p = sp.Popen("$(git rev-parse --show-toplevel)/main.exe " + str(n),
-                 shell=True, stdout=sp.PIPE, stderr=sp.PIPE)
+    cmd = "$(git rev-parse --show-toplevel)/main.exe %d %d" \
+          % (n, NUM_REPITITIONS)
+    p = sp.Popen(cmd, shell=True, stdout=sp.PIPE, stderr=sp.PIPE)
     p.wait()
     if p.returncode is not 0:
         print p.stderr.read()
@@ -27,7 +32,7 @@ def run_order(n):
 
     for line in p.stdout:
         words = line.split()
-        data[words[0]] = float(words[1])/(100*float(4**n))
+        data[words[0]] = float(words[1])/(NUM_REPITITIONS*float(4**n))
 
     return data
 
@@ -44,7 +49,7 @@ def plot_data(data):
     for method in method_names:
         print xs
         print ys[method]
-        plt.plot(xs,ys[method])
+        plt.plot(xs, ys[method])
 
     plt.yscale('log')
     plt.xlabel('Hilbert Curve Order')
@@ -55,9 +60,10 @@ def plot_data(data):
 def main():
     make()
     data = {}
-    for order in range(1,13):
+    for order in range(1, 13):
         data[order] = run_order(order)
     plot_data(data)
     fin()
+
 
 main()
