@@ -2,11 +2,11 @@ EXEC   = main.exe
 
 OPTIMIZE =  -O2
 
-OBJS   = main.o hilbert_generation.o hil_xy_from_s.o timer.o
+OBJS   = main.o hilbert_generation.o hil_xy_from_s.o timer.o lam_shapiro.o
 
 CC     = gcc
 
-INCL   = hilbert_generation.h hil_xy_from_s.h timer.h
+INCL   = hilbert_generation.h hil_xy_from_s.h timer.h lam_shapiro.h
 
 LIBS   = -lm
 
