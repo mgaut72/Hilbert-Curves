@@ -1,8 +1,8 @@
 import subprocess as sp
-import matplotlib.pyplot as plt
 import os
-import numpy as np
 import collections
+import time
+import pickle
 
 working_dir = os.getcwd()
 NUM_REPITITIONS = 1000
@@ -37,24 +37,29 @@ def run_order(n):
     return data
 
 
-def plot_data(data):
-    xs = data.keys()
-    method_names = data[xs[0]].keys()
-    ys = collections.defaultdict(list)
-    for x in xs:
-        for method in method_names:
-            ys[method].append(data[x][method])
+#def plot_data(data):
+#    xs = data.keys()
+#    method_names = data[xs[0]].keys()
+#    ys = collections.defaultdict(list)
+#    for x in xs:
+#        for method in method_names:
+#            ys[method].append(data[x][method])
+#
+#    fig = plt.figure()
+#    for method in method_names:
+#        print xs
+#        print ys[method]
+#        plt.plot(xs, ys[method])
+#
+#    plt.yscale('log')
+#    plt.xlabel('Hilbert Curve Order')
+#    plt.ylabel('log(verification time)')
+#    plt.show()
+#
 
-    fig = plt.figure()
-    for method in method_names:
-        print xs
-        print ys[method]
-        plt.plot(xs, ys[method])
-
-    plt.yscale('log')
-    plt.xlabel('Hilbert Curve Order')
-    plt.ylabel('log(verification time)')
-    plt.show()
+def save_data(data):
+    with open("performance-data-" + str(time.time()), 'w') as f:
+        pickle.dump(data, f)
 
 
 def main():
@@ -62,7 +67,7 @@ def main():
     data = {}
     for order in range(1, 13):
         data[order] = run_order(order)
-    plot_data(data)
+    save_data(data)
     fin()
 
 

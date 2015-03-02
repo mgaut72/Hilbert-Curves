@@ -50,12 +50,9 @@ int main(int argc, char **argv){
     t_start = timer();
     for(j = 0; j < repititions; j++){
         x = y = 0;
-        fprintf(stderr, "testing the coordinate calculation for each point\n");
+        //fprintf(stderr, "testing the coordinate calculation for each point\n");
         for(i = 0; i < pow(4, order); i++){
             hil_xy_from_s(i, order, &x, &y);
-            if (verify(curve, i, x, y)){
-                break;
-            }
         }
     }
     t_stop  = timer();
@@ -67,12 +64,9 @@ int main(int argc, char **argv){
     t_start = timer();
     for(j = 0; j < repititions; j++){
         x = y = 0;
-        fprintf(stderr, "testing the coordinate calculation for each point\n");
+        //fprintf(stderr, "testing the coordinate calculation for each point\n");
         for(i = 0; i < pow(4, order); i++){
             hil_xy_from_s_ls(i, order, &x, &y);
-            if (verify(curve, i, x, y)){
-                break;
-            }
         }
     }
     t_stop  = timer();
@@ -84,12 +78,9 @@ int main(int argc, char **argv){
     t_start = timer();
     for(j = 0; j < repititions; j++){
         x = y = 0;
-        fprintf(stderr, "testing the coordinate calculation for each point\n");
+        //fprintf(stderr, "testing the coordinate calculation for each point\n");
         for(i = 0; i < pow(4, order); i++){
             hil_xy_from_s_ls(i, order, &x, &y);
-            if (verify(curve, i, x, y)){
-                break;
-            }
         }
     }
     t_stop  = timer();
