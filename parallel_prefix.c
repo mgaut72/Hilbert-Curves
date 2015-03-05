@@ -10,7 +10,7 @@
  *
  */
 
-void hil_xy_from_s_pp(unsigned s, int n, unsigned *xp, unsigned *yp){
+inline void hil_xy_from_s_pp(unsigned s, int n, unsigned *xp, unsigned *yp){
 
     unsigned comp,  // bits that determine when we need to complement x,y
              swap,  // bits that determine when we need to swap x,y

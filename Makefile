@@ -4,7 +4,7 @@ OPTIMIZE =  -O2
 
 OBJS   = hilbert_generation.o hil_xy_from_s.o timer.o lam_shapiro.o parallel_prefix.o analysis.o
 
-CFLAGS = #-Wall -Werror
+CFLAGS = -Winline #-Wall -Werror
 
 CC     = gcc $(CFLAGS)
 
