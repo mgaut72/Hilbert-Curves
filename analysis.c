@@ -61,7 +61,7 @@ int main(int argc, char **argv){
          */
         t_start = timer();
         for(i = 0; i < repititions; i++){
-            hil_xy_from_s_ls(i, order, &x, &y);
+            hil_xy_from_s_pp(i, order, &x, &y);
         }
         t_stop  = timer();
         printf("parallel_prefix %e\n", t_stop - t_start);
