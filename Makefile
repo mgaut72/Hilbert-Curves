@@ -2,14 +2,14 @@ EXEC   = main.exe
 
 OPTIMIZE =  -O2
 
-OBJS   = main.o hilbert_generation.o hil_xy_from_s.o timer.o lam_shapiro.o parallel_prefix.o
+OBJS   = main.o hilbert_generation.o hil_xy_from_s.o timer.o lam_shapiro.o parallel_prefix.o hil_s_from_xy.o
 
 CFLAGS = -Wall -Werror
 
 CC     = gcc $(CFLAGS)
 
 
-INCL   = hilbert_generation.h hil_xy_from_s.h timer.h lam_shapiro.h parallel_prefix.h
+INCL   = hilbert_generation.h hil_xy_from_s.h timer.h lam_shapiro.h parallel_prefix.h hil_s_from_xy.h
 
 LIBS   = -lm
 

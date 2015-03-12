@@ -3,6 +3,7 @@
 #include <math.h>
 #include "hilbert_generation.h"
 #include "hil_xy_from_s.h"
+#include "hil_s_from_xy.h"
 #include "lam_shapiro.h"
 #include "parallel_prefix.h"
 #include "timer.h"
@@ -43,9 +44,8 @@ int main(int argc, char **argv){
      *
      * expected values based on output from hilbert generation
      */
-    unsigned x, y;
+    unsigned x, y, s;
     int i,j;
-
 
     t_start = timer();
     for(j = 0; j < repititions; j++){
@@ -95,6 +95,23 @@ int main(int argc, char **argv){
     t_stop  = timer();
     printf("parallel_prefix %e\n", t_stop - t_start);
 
+
+    /*
+     * test xy -> s conversions
+     *
+     * we know that given the order, the maximal x and y is ((2^order) - 1)
+     */
+    for(j = 0; j < repititions; j++){
+        fprintf(stderr, "testing the distance calculation for each coordinate\n");
+        for(x = 0; x < pow(2,order)-1; x++){
+            for(y = 0; y < pow(2,order)-1; y++){
+                s = hil_s_from_xy(x,y,order);
+                if (verify(curve, s, x, y)){
+                    break;
+                }
+            }
+        }
+    }
 
     return 0;
 }

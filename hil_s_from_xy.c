@@ -13,7 +13,7 @@
 unsigned hil_s_from_xy(unsigned x, unsigned y, int n){
 
     int i;
-    unsigned state, x, row;
+    unsigned state, s, row;
 
     state = 0;
     s = 0;
