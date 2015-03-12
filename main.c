@@ -86,7 +86,7 @@ int main(int argc, char **argv){
         x = y = 0;
         fprintf(stderr, "testing the coordinate calculation for each point\n");
         for(i = 0; i < pow(4, order); i++){
-            hil_xy_from_s_ls(i, order, &x, &y);
+            hil_xy_from_s_pp(i, order, &x, &y);
             if (verify(curve, i, x, y)){
                 break;
             }
