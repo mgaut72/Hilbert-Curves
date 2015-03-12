@@ -32,19 +32,23 @@ int main(int argc, char **argv){
              x, y;  // return value for our coordinates
     int i;
 
+    FILE *fp = fopen("analysis.out", "w");
+
+    fprintf(fp, "repititions %d\n\n", repititions);
 
     int order;
     s = 1;
     for(order = 1; order <= max_order; order++){
 
-        printf("order %d\n", order);
+        fprintf(fp, "order %d\n", order);
+        fflush(fp);
 
         t_start = timer();
         for(i = 0; i < repititions; i++){
             hil_xy_from_s(i, order, &x, &y);
         }
         t_stop  = timer();
-        printf("state_table %e\n", t_stop - t_start);
+        fprintf(fp, "state_table %e\n", t_stop - t_start);
 
         /*
          * coordinates from distance using the lam shapiro method
@@ -54,7 +58,7 @@ int main(int argc, char **argv){
             hil_xy_from_s_ls(i, order, &x, &y);
         }
         t_stop  = timer();
-        printf("Lam-Shapiro %e\n", t_stop - t_start);
+        fprintf(fp, "Lam-Shapiro %e\n", t_stop - t_start);
 
         /*
          * coordinates from distance using the parallel prefix method
@@ -64,9 +68,10 @@ int main(int argc, char **argv){
             hil_xy_from_s_pp(i, order, &x, &y);
         }
         t_stop  = timer();
-        printf("parallel_prefix %e\n", t_stop - t_start);
+        fprintf(fp, "parallel_prefix %e\n", t_stop - t_start);
 
         printf("\n");
+        fflush(fp);
     }
 
     return 0;
