@@ -25,7 +25,22 @@ void hil_xy_from_s_pp(unsigned s, int n, unsigned *xp, unsigned *yp){
      */
     s = s | (0x55555555 << 2*n); // shift by 2n - each order == 2 bits
 
+
+    /* all the even bits of s are in teh odd bits of sr.
+     * the even bits of sr are 0
+     */
     sr = (s >> 1) & 0x55555555;
+
+    /* (s & 0x55555555) is all the odd bits of s with nothing in evens
+     * sr is all the even bits of s in the odd spots, nothing in the evens
+     *
+     * Consider the least significant pair of bits of cs
+     * the first (least significant) bit will be 0 when s_{2i} == s_{2i+1}
+     * the second bit will be zero unless both s_{2i} == s_{2i+1} == 1
+     *
+     * This is exactly the definition of S_i and C_i in figure 16-7 of
+     * hacker's delight
+     */
     cs = ((s & 0x55555555) + sr) ^ 0x55555555;
 
     /* at this point cs has only been taken into account be how it is effected
@@ -52,15 +67,31 @@ void hil_xy_from_s_pp(unsigned s, int n, unsigned *xp, unsigned *yp){
      *              and each 's' is the swap bit for that step
      *
      *  so now we seperate them into sssssss and cccccccc
+     *
+     *  now each pair of bits of swap and each pair of bits
+     *  of comp indicate how to transform the given step
      */
     swap = cs & 0x55555555;
     comp = (cs >> 1) & 0x55555555;
 
 
 
+    /* s ^ sr is the XOR with s_{2i + 1}
+     * and since sr is the even bits of s, in the odd spots of sr
+     * and 0 in the even bits of sr, this includes the shor of s_{2i}
+     * for the y bits
+     *
+     * finally t ^ (t << 1) ensures that both the x bit and the y bit
+     * get the common compenent that t represents in Figure 16-7
+     *
+     */
     t = (s & swap) ^ comp;
     s = s ^ sr ^ t ^ (t << 1);
 
+    /* has the effect of unpadding s to only be 2n bits
+     *
+     * ((1 << 2*n) - 1) will be 0...01..1 where there are 2n ones
+     */
     s = s & ((1 << 2*n) - 1);
 
     /* Now "unshuffle" to separate the x and y bits.
