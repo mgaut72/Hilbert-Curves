@@ -1,18 +1,17 @@
-EXEC   = main.exe
+EXEC   = analysis.exe
 
 OPTIMIZE =  -O2
 
-OBJS   = main.o hilbert_generation.o hil_xy_from_s.o timer.o lam_shapiro.o parallel_prefix.o
+OBJS   = hilbert_generation.o hil_xy_from_s.o timer.o lam_shapiro.o parallel_prefix.o analysis.o
 
-CFLAGS = -Wall -Werror
+CFLAGS = -Winline #-Wall -Werror
 
 CC     = gcc $(CFLAGS)
 
 
 INCL   = hilbert_generation.h hil_xy_from_s.h timer.h lam_shapiro.h parallel_prefix.h
 
-LIBS   = -lm
-
+LIBS   = -lm -lrt
 
 #the following lines build an executable from the object files
 $(EXEC): $(OBJS)
