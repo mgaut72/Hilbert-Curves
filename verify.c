@@ -50,7 +50,7 @@ int main(int argc, char **argv){
     t_start = timer();
     for(j = 0; j < repititions; j++){
         x = y = 0;
-        fprintf(stderr, "testing the coordinate calculation for each point\n");
+        //fprintf(stderr, "testing the coordinate calculation for each point\n");
         for(i = 0; i < pow(4, order); i++){
             hil_xy_from_s(i, order, &x, &y);
             if (verify(curve, i, x, y)){
@@ -59,7 +59,7 @@ int main(int argc, char **argv){
         }
     }
     t_stop  = timer();
-    printf("state_table %e\n", t_stop - t_start);
+    printf("state_table method verified in %e\n", t_stop - t_start);
 
     /*
      * coordinates from distance using the lam shapiro method
@@ -67,7 +67,7 @@ int main(int argc, char **argv){
     t_start = timer();
     for(j = 0; j < repititions; j++){
         x = y = 0;
-        fprintf(stderr, "testing the coordinate calculation for each point\n");
+        //fprintf(stderr, "testing the coordinate calculation for each point\n");
         for(i = 0; i < pow(4, order); i++){
             hil_xy_from_s_ls(i, order, &x, &y);
             if (verify(curve, i, x, y)){
@@ -76,7 +76,7 @@ int main(int argc, char **argv){
         }
     }
     t_stop  = timer();
-    printf("Lam-Shapiro %e\n", t_stop - t_start);
+    printf("Lam-Shapiro verified in %e\n", t_stop - t_start);
 
     /*
      * coordinates from distance using the parallel prefix method
@@ -84,7 +84,7 @@ int main(int argc, char **argv){
     t_start = timer();
     for(j = 0; j < repititions; j++){
         x = y = 0;
-        fprintf(stderr, "testing the coordinate calculation for each point\n");
+        //fprintf(stderr, "testing the coordinate calculation for each point\n");
         for(i = 0; i < pow(4, order); i++){
             hil_xy_from_s_pp(i, order, &x, &y);
             if (verify(curve, i, x, y)){
@@ -93,7 +93,7 @@ int main(int argc, char **argv){
         }
     }
     t_stop  = timer();
-    printf("parallel_prefix %e\n", t_stop - t_start);
+    printf("parallel_prefix verified in %e\n", t_stop - t_start);
 
 
     /*
@@ -101,8 +101,8 @@ int main(int argc, char **argv){
      *
      * we know that given the order, the maximal x and y is ((2^order) - 1)
      */
+    t_start = timer();
     for(j = 0; j < repititions; j++){
-        fprintf(stderr, "testing the distance calculation for each coordinate\n");
         for(x = 0; x < pow(2,order)-1; x++){
             for(y = 0; y < pow(2,order)-1; y++){
                 s = hil_s_from_xy(x,y,order);
@@ -112,6 +112,8 @@ int main(int argc, char **argv){
             }
         }
     }
+    t_stop  = timer();
+    printf("reverse state table verified in %e\n", t_stop - t_start);
 
     return 0;
 }

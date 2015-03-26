@@ -1,22 +1,34 @@
-EXEC   = main.exe
+#EXEC   = analysis.exe
 
 OPTIMIZE =  -O2
 
-OBJS   = main.o hilbert_generation.o hil_xy_from_s.o timer.o lam_shapiro.o parallel_prefix.o hil_s_from_xy.o
+OBJS   = hilbert_generation.o hil_xy_from_s.o timer.o lam_shapiro.o parallel_prefix.o hil_s_from_xy.o
 
-CFLAGS = -Wall -Werror
+CFLAGS = #-Wall -Werror
 
 CC     = gcc $(CFLAGS)
 
-
 INCL   = hilbert_generation.h hil_xy_from_s.h timer.h lam_shapiro.h parallel_prefix.h hil_s_from_xy.h
 
-LIBS   = -lm
+LIBS   = -lm -lrt
+
+all: analysis verify parallel_prefix_derivation
+
+verify: $(OBJS) verify.o
+	$(CC) $(OBJS) $(LIBS) verify.o -o verify.exe
+
+verify.o: $(OBJS)
 
 
-#the following lines build an executable from the object files
-$(EXEC): $(OBJS)
-		 $(CC) $(OBJS) $(LIBS) -o $(EXEC)
+analysis: $(OBJS) analysis.o
+	$(CC) $(OBJS) $(LIBS) analysis.o -o analysis.exe
+
+analysis.o: $(OBJS)
+
+
+parallel_prefix_derivation:
+	$(CC) parallel_prefix_derivation.c -o parallel_prefix_derivation.exe
+
 
 $(OBJS): $(INCL)
 
@@ -24,4 +36,4 @@ $(OBJS): $(INCL)
 .PHONY : clean
 
 clean:
-		 rm -f $(OBJS) $(EXEC)
+		 rm -f *.exe *.o
