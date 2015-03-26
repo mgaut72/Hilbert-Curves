@@ -53,10 +53,13 @@ int main(int argc, char **argv){
         //fprintf(stderr, "testing the coordinate calculation for each point\n");
         for(i = 0; i < pow(4, order); i++){
             hil_xy_from_s(i, order, &x, &y);
+            if (verify(curve, i, x, y)){
+                break;
+            }
         }
     }
     t_stop  = timer();
-    printf("state_table %e\n", t_stop - t_start);
+    printf("state_table method verified in %e\n", t_stop - t_start);
 
     /*
      * coordinates from distance using the lam shapiro method
@@ -67,10 +70,13 @@ int main(int argc, char **argv){
         //fprintf(stderr, "testing the coordinate calculation for each point\n");
         for(i = 0; i < pow(4, order); i++){
             hil_xy_from_s_ls(i, order, &x, &y);
+            if (verify(curve, i, x, y)){
+                break;
+            }
         }
     }
     t_stop  = timer();
-    printf("Lam-Shapiro %e\n", t_stop - t_start);
+    printf("Lam-Shapiro verified in %e\n", t_stop - t_start);
 
     /*
      * coordinates from distance using the parallel prefix method
@@ -87,7 +93,7 @@ int main(int argc, char **argv){
         }
     }
     t_stop  = timer();
-    printf("parallel_prefix %e\n", t_stop - t_start);
+    printf("parallel_prefix verified in %e\n", t_stop - t_start);
 
 
     return 0;
