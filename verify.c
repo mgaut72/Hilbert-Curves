@@ -5,6 +5,7 @@
 #include "hil_xy_from_s.h"
 #include "hil_s_from_xy.h"
 #include "lam_shapiro.h"
+#include "reverse_lam_shapiro.h"
 #include "parallel_prefix.h"
 #include "timer.h"
 
@@ -99,6 +100,8 @@ int main(int argc, char **argv){
     /*
      * test xy -> s conversions
      *
+     * state table
+     *
      * we know that given the order, the maximal x and y is ((2^order) - 1)
      */
     t_start = timer();
@@ -114,6 +117,25 @@ int main(int argc, char **argv){
     }
     t_stop  = timer();
     printf("reverse state table verified in %e\n", t_stop - t_start);
+
+    /*
+     * test xy -> s conversions
+     *
+     * lam shapiro
+     */
+    t_start = timer();
+    for(j = 0; j < repititions; j++){
+        for(x = 0; x < pow(2,order)-1; x++){
+            for(y = 0; y < pow(2,order)-1; y++){
+                s = hil_s_from_xy_ls(x,y,order);
+                if (verify(curve, s, x, y)){
+                    break;
+                }
+            }
+        }
+    }
+    t_stop  = timer();
+    printf("reverse lam shapiro verified in %e\n", t_stop - t_start);
 
     return 0;
 }

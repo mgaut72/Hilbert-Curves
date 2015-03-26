@@ -2,13 +2,15 @@
 
 OPTIMIZE =  -O2
 
-OBJS   = hilbert_generation.o hil_xy_from_s.o timer.o lam_shapiro.o parallel_prefix.o hil_s_from_xy.o
+OBJS   = hilbert_generation.o hil_xy_from_s.o timer.o lam_shapiro.o \
+		 parallel_prefix.o hil_s_from_xy.o reverse_lam_shapiro.o
 
 CFLAGS = #-Wall -Werror
 
 CC     = gcc $(CFLAGS)
 
-INCL   = hilbert_generation.h hil_xy_from_s.h timer.h lam_shapiro.h parallel_prefix.h hil_s_from_xy.h
+INCL   = hilbert_generation.h hil_xy_from_s.h timer.h lam_shapiro.h \
+		 parallel_prefix.h hil_s_from_xy.h reverse_lam_shapiro.o
 
 LIBS   = -lm -lrt
 
