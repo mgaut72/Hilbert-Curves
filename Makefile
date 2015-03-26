@@ -12,7 +12,7 @@ CC     = gcc $(CFLAGS)
 INCL   = hilbert_generation.h hil_xy_from_s.h timer.h lam_shapiro.h \
 		 parallel_prefix.h hil_s_from_xy.h reverse_lam_shapiro.o
 
-LIBS   = -lm -lrt
+LIBS   = -lm
 
 all: analysis verify parallel_prefix_derivation
 
@@ -23,7 +23,7 @@ verify.o: $(OBJS)
 
 
 analysis: $(OBJS) analysis.o
-	$(CC) $(OBJS) $(LIBS) analysis.o -o analysis.exe
+	$(CC) $(OBJS) $(LIBS) -lrt analysis.o -o analysis.exe
 
 analysis.o: $(OBJS)
 
