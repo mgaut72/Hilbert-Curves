@@ -12,17 +12,23 @@ INCL   = hilbert_generation.h hil_xy_from_s.h timer.h lam_shapiro.h parallel_pre
 
 LIBS   = -lm -lrt
 
-all: analysis verify
+all: analysis verify parallel_prefix_derivation
 
 verify: $(OBJS) verify.o
 	$(CC) $(OBJS) $(LIBS) verify.o -o verify.exe
+
+verify.o: $(OBJS)
+
 
 analysis: $(OBJS) analysis.o
 	$(CC) $(OBJS) $(LIBS) analysis.o -o analysis.exe
 
 analysis.o: $(OBJS)
 
-verify.o: $(OBJS)
+
+parallel_prefix_derivation:
+	$(CC) parallel_prefix_derivation.c -o parallel_prefix_derivation.exe
+
 
 $(OBJS): $(INCL)
 
@@ -30,4 +36,4 @@ $(OBJS): $(INCL)
 .PHONY : clean
 
 clean:
-		 rm -f analysis.exe *.o verify.exe
+		 rm -f *.exe *.o
