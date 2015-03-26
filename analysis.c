@@ -17,7 +17,7 @@ int main(int argc, char **argv){
     }
     int max_order = atoi(argv[1]);
 
-    int repititions = 2147483647;   // max integer
+    int repititions = 50;   // max integer
     if(argc > 2)
         repititions = atoi(argv[2]);
 
@@ -32,23 +32,20 @@ int main(int argc, char **argv){
              x, y;  // return value for our coordinates
     int i;
 
-    FILE *fp = fopen("analysis.out", "w");
-
-    fprintf(fp, "repititions %d\n\n", repititions);
+    printf("repititions %d\n\n", repititions);
 
     int order;
     s = 1;
     for(order = 1; order <= max_order; order++){
 
-        fprintf(fp, "order %d\n", order);
-        fflush(fp);
+        printf("order %d\n", order);
 
         t_start = timer();
         for(i = 0; i < repititions; i++){
             hil_xy_from_s(i, order, &x, &y);
         }
         t_stop  = timer();
-        fprintf(fp, "state_table %e\n", t_stop - t_start);
+        printf("state_table %e\n", t_stop - t_start);
 
         /*
          * coordinates from distance using the lam shapiro method
@@ -58,7 +55,7 @@ int main(int argc, char **argv){
             hil_xy_from_s_ls(i, order, &x, &y);
         }
         t_stop  = timer();
-        fprintf(fp, "Lam-Shapiro %e\n", t_stop - t_start);
+        printf("Lam-Shapiro %e\n", t_stop - t_start);
 
         /*
          * coordinates from distance using the parallel prefix method
@@ -68,10 +65,9 @@ int main(int argc, char **argv){
             hil_xy_from_s_pp(i, order, &x, &y);
         }
         t_stop  = timer();
-        fprintf(fp, "parallel_prefix %e\n", t_stop - t_start);
+        printf("parallel_prefix %e\n", t_stop - t_start);
 
         printf("\n");
-        fflush(fp);
     }
 
     return 0;
