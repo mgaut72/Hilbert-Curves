@@ -12,12 +12,17 @@ INCL   = hilbert_generation.h hil_xy_from_s.h timer.h lam_shapiro.h parallel_pre
 
 LIBS   = -lm -lrt
 
-all: analysis
+all: analysis verify
+
+verify: $(OBJS) verify.o
+	$(CC) $(OBJS) $(LIBS) verify.o -o verify.exe
 
 analysis: $(OBJS) analysis.o
-		 $(CC) $(OBJS) $(LIBS) analysis.o -o analysis.exe
+	$(CC) $(OBJS) $(LIBS) analysis.o -o analysis.exe
 
 analysis.o: $(OBJS)
+
+verify.o: $(OBJS)
 
 $(OBJS): $(INCL)
 
@@ -25,4 +30,4 @@ $(OBJS): $(INCL)
 .PHONY : clean
 
 clean:
-		 rm -f analysis.exe *.o
+		 rm -f analysis.exe *.o verify.exe
