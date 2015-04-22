@@ -1,5 +1,3 @@
-#EXEC   = analysis.exe
-
 OPTIMIZE =  -O2
 
 OBJS   = hilbert_generation.o hil_xy_from_s.o timer.o lam_shapiro.o \
