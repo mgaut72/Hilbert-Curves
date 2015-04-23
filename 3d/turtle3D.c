@@ -1,5 +1,7 @@
 #include "turtle3D.h"
 
+const orientation3D default_orientation3D = { {1,0,0}, {0,1,0}, {0,0,1} };
+
 orientation3D turn_left(orientation3D o){
     orientation3D new = o;
     new.heading[0] = o.left[0];
